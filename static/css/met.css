@@ -1,0 +1,25 @@
+body {
+    font-family: Helvetica;
+    }
+.panel-body {
+    font-family: Helvetica;
+    font-size: 14;
+}
+.panel-title {
+    font-family: Helvetica;
+    font-size: 20;
+}
+
+.panel-heading {
+    padding: 20px;
+}
+
+li {
+    font-family: Helvetica;
+    font-size: 14;
+}
+p{
+    font-family: Helvetica;
+    font-size: 14;
+    text-align: justify;
+}

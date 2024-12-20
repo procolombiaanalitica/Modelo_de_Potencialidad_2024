@@ -1,0 +1,5 @@
+venv-mpe
+*.pyc
+.env
+.DS_Store
+

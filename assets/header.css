@@ -1,0 +1,31 @@
+.app-header {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: thin lightgrey solid;
+}
+
+.app-header .app-header--title {
+    font-size: 22px;
+    padding-left: 5px;
+}
+
+
+.export {
+    text-indent: -9999px;
+    line-height: 0;
+    /* Collapse the original line */
+}
+
+.export::after {
+    content: "Excel";
+    text-indent: 0;
+    display: block;
+    line-height: initial;
+    padding: 5px;
+    /* New content takes up original line height */
+}
+
+.dash-spreadsheet-menu {
+    padding-bottom: 10px;
+    text-align: right;
+}

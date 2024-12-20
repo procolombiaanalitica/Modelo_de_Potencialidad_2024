@@ -1,0 +1,231 @@
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/met.css') }}">  
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    
+    <title>Metodología</title>
+</head>
+
+<body>
+    <div class="container" style="padding-top: 25px;">
+        <div class="jumbotron">
+            <h1>Metodología</h1>
+        </div>
+
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Introducción </h3>
+                </div>
+                <div class="panel-body">
+                    El modelo de potencialidad de exportaciones consta de dos ejercicios: 
+                    <br style="padding-top: 20px;"></br>
+                    <ul>
+                        <li>
+                            1.	Modelo de Productos Potenciales: Permite ver los bienes con potencial (partida, sector y subsector) en un país determinado. 
+                        </li>
+                        <li>
+                             2.	Modelo de Países Potenciales: Permite encontrar los países con potencial para un determinado bien (partida, sector, subsector).
+                        </li>
+                    </ul>
+                   <p>Ambos ejercicios analizan las partidas a 6 dígitos, según los códigos del Sistema Armonizado del año 2017, correspondientes a bienes no minero-energéticos, y tienen en cuenta un total de 183 países.</p>
+                </div>
+              </div>
+
+
+              <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <h3 class="panel-title">Procesamiento de los datos y cálculo de los puntajes de potencialidad</h3>
+                    </div>
+                    <div class="panel-body">
+                        El modelo de potencialidad de exportaciones consta de dos ejercicios: 
+                        <br style="padding-top: 20px;"></br>
+                        <ol>
+                           <li>
+                            Las variables utilizadas para definir la potencialidad fueron compiladas en una sola base de datos.
+                           </li>
+                            
+                           <li>
+                                Cada variable fue transformada y se dejó en un rango continuo de 0 a 1. 
+                                <br>
+                                <p> Por ejemplo: Para la variable de importaciones, si un país tenía el valor más alto, éste obtenía un puntaje de 1 y el país con el menor valor obtenía un puntaje de 0. 
+                                    Esto fue hecho para cada una de las variables analizadas. Lo cual me permite hacer operaciones entre variables expresadas en diferentes magnitudes (porcentajes, unidades monetarias, CIF, FOB, variables categóricas, etc.). 
+                                </p>
+                           </li>
+                                  
+                            <li>
+                                Con las variables en una misma magnitud, se calcularon los puntajes de oferta y de demanda.
+                            </li>
+
+                            <li>
+                                Los pesos asignados a cada variable dentro de estos dos grupos (oferta y demanda) fueron definidos por dos metodologías, cada una con un peso de 50%: 
+                                <ul>
+                                    <li>
+                                        Matriz de comparación por pares: Tiene en cuenta la información cualitativa que poseen los líderes expertos.
+                                    </li>
+                                    <li>
+                                        Análisis de componentes principales: Tiene en cuenta la información estadística que poseen las variables. 
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                Finalmente, se calculó un puntaje total de potencialidad donde se combinó el puntaje de oferta y el puntaje de demanda, cada uno con un peso de 50%.
+                            </li>
+
+                        </ol>
+                    </div>
+                  </div>   
+                
+                  <div class="panel panel-default">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">Pesos de las variables para la oferta y la demanda de los modelos</h3>
+                        </div>
+                        <div class="panel-body">
+                                <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-6">
+                                            <div class="card" >
+                                                    <a href="/paises-potenciales/">
+                                                        <img class="card-img-top" style="height: min-content;" src="{{ url_for('static', filename='tablas/pais-dem.png') }}" alt="Card image cap">
+                                                    </a>
+                                                    <div class="card-body">
+                                                        <h2 class="card-title">Países potenciales</h2>
+                                                        <h4 class="card-text">Demanda</h4>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-6">
+                                                <div class="card" >
+                                                        <a href="/paises-potenciales/">
+                                                            <img class="card-img-top" style="height: min-content;" src="{{ url_for('static', filename='tablas/pais-of.png') }}" alt="Card image cap">
+                                                        </a>
+                                                        <div class="card-body">
+                                                            <h2 class="card-title">Países potenciales</h2>
+                                                            <h4 class="card-text">Oferta</h4>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                      </div>
+                                      <div class="row" style="padding-top:25px">
+                                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                                <div class="card" >
+                                                        <a href="/productos-potenciales/">
+                                                            <img class="card-img-top" style="height: min-content;" src="{{ url_for('static', filename='tablas/prod-dem.png') }}" alt="Card image cap">
+                                                        </a>
+                                                        <div class="card-body">
+                                                            <h2 class="card-title">Productos,sectores y subsectores potenciales</h2>
+                                                            <h4 class="card-text">Demanda</h4>
+                                                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-6">
+                                                    <div class="card" >
+                                                            <a href="/productos-potenciales/">
+                                                                <img class="card-img-top" style="height: min-content;" src="{{ url_for('static', filename='tablas/prod-of.png') }}" alt="Card image cap">
+                                                            </a>
+                                                            <div class="card-body">
+                                                                <h2 class="card-title">Productos,sectores y subsectores potenciales</h2>
+                                                                <h4 class="card-text">Oferta</h4>
+                                                            </div>
+                                                    </div>
+                                                </div>
+                                          </div>     
+                        </div>
+                      </div>
+
+                      <div class="card">
+                            <div class="card-header">
+                                <h3>Interpretación de resultados</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                            <p class="card-text">
+                                                Los puntajes están en un rango de 0 a 1.
+                                                Mercados cuyo valor sea cercano a uno reflejan un alto potencial, caso contrario los que tienen un valor cercano a cero.
+                                                Para este ejercicio se dividió el cuadrante en 9 grupos, siendo los cuadrantes 1, 2, 3 y 4 los de mayor potencial total, al reflejar desempeños adecuados desde la oferta y la demanda.
+                                            </p> 
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <img class="card-img-top" style="height: inherit;width: inherit;" src="{{ url_for('static', filename='tablas/cuadrantes.png') }}" alt="Card image cap">
+                                    </div>
+                                       
+                                </div>
+                            </div>
+                      </div>
+                      <div class="row" style="padding-top:25px">
+                          <div class="col">
+                              <div class="card">
+                                  <div class="card-header">
+                                        <h3>Fuentes de información</h3>
+                                  </div>
+                              </div>
+                                    <div class="card-body">
+                                            <ul>
+                                                    <li>
+                                                      Trademap
+                                                    </li>
+                                                    <li>
+                                                      DANE
+                                                      </li>
+                                                      <li>
+                                                          DIAN
+                                                          </li>
+                                                          <li>
+                                                              Banco Mundial
+                                                              </li>
+                                                              <li>
+                                                                  FMI
+                                                                  </li>
+                                                                  <li>
+                                                                      Macmap
+                                                                      </li>
+                                                </ul>
+                                    </div>
+                                
+                          </div>
+                    
+                        </div> 
+
+        <div class="row">
+            <div class="col">
+                <h3>Preparado por: Coordinación de Analítica – Gerencia de Inteligencia Comercial</h3>
+            </div>
+        </div>
+                            
+    </div>             
+
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd" crossorigin="anonymous"></script>   
+</body>
+
+<div class="mt-5 pt-5 pb-5 footer">
+    <div class="container">
+      
+      <div class="row mt-3">
+        <div class="col">
+            <img style="height:50" src="{{ url_for('static', filename='logo-min.png') }}">
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col copyright">
+          <p class=""><small class="text-white-60">© 2023. Procolombia.</small></p>
+        </div>
+      </div>
+    </div>
+    </div>
+
+

@@ -1,0 +1,106 @@
+<head>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/linearicons.css') }}">
+
+
+    <title>Modelos de Potencialidad</title>
+</head>
+
+<body>
+
+    <div>
+        <!-- start banner Area -->
+        <section class="banner-area" id="home" style="background-color: #152F4F;height: 280px;">
+            <div class="container">
+                <div style="padding-top: 20px;" class="row fullscreen d-flex align-items-center justify-content-center">
+                    <div class="banner-content col-md-12">
+                        <img style="height:45;" src="static/logo white.png" />
+
+                    </div>
+                    <div style="padding-top: 20px;" class="row fullscreen d-flex align-items-center justify-content-center">
+                        <div class="banner-content col-md-12">
+                            <h1 style="color: white;padding-top: 20px;text-align: center;">
+                                Modelos de Potencialidad<br>
+                            </h1>
+                            <h2 style="color: white;padding-top: 20px;text-align: center;">
+                                Generales<br>
+                            </h2>
+                            <p style="text-align: center;font-weight: 500;" class="text-white text-uppercase">
+                                (2024-2025)
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+        </section>
+
+        <div class="container" style="background-color: white;">
+            <br>
+            <br>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                    <div class="card" style="height: 580px;width: 100%;max-height: 1000px;">
+                        <a href="/paises-potenciales/">
+                            <img style="height: 400px;" class="card-img-top" src={{url_for( 'static', filename='World.jpg' )}} alt="Card image cap">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">Países potenciales</h5>
+                            <p class="card-text">Seleccione uno o varios productos, sectores o subsectores de interés y obtenga un listado de países potenciales para dicha selección.</p>
+                            <a href="/paises-potenciales/" class="btn btn-primary">Ingresar</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                    <div class="card" style="height: 580px;width: 100%;max-height: 1000px;">
+                        <a href="/productos-potenciales/">
+                            <img style="height: 400px;" class="card-img-top" src={{url_for( 'static', filename='productos.png' )}} alt="Card image cap">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">Productos, sectores y subsectores potenciales</h5>
+                            <p class="card-text">Seleccione uno o varios países de interés y obtenga un listado de productos, sectores o subsectores potenciales para dicha selección.</p>
+                            <a href="/productos-potenciales/" class="btn btn-danger">Ingresar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card" style="height:auto;">
+                        <div class="card-body">
+                            <h5 class="card-title">Metodología</h5>
+                            <p class="card-text"></p>
+                            <a href="/metodologia/" class="btn btn-info">Conoce +</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        </div>
+
+        <body>
+
+
+            <div class="mt-5 pt-5 pb-5 footer">
+                <div class="container">
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <img style="height:50" src="static/logo-min.png">
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col copyright">
+                            <p class=""><small class="text-white-60">© 2024. Procolombia.</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
