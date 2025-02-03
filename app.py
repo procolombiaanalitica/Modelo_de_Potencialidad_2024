@@ -51,17 +51,17 @@ base=pd.read_csv("{}/files4/Base paises potenciales.zip".format(path),
 
 #Types
 dtype={
-    "Exportaciones Colombianas en 2022 (miles USD)":int,
-    "Valor Importaciones 2022 (miles USD)":int,
-    "PIB USD 2022":int,
-    "Exportaciones promedio 2018-2022 (miles USD)":int,
-    "Importaciones promedio 2018-2022 (miles USD)":int,
+    "Exportaciones Colombianas en 2023 (miles USD)":int,
+    "Valor Importaciones 2023 (miles USD)":int,
+    "PIB USD 2023":int,
+    "Exportaciones promedio 2019-2023 (miles USD)":int,
+    "Importaciones promedio 2019-2023 (miles USD)":int,
     "Ranking LPI":int,
-    "Población 2022 (millones)":int,
-    "Promedio Desempleo (2018-2022)":float,
-    "Crecimiento PIB (2018-2022)":float,
-    "Diferencia Promedio exportaciones 2018-2022 (miles USD)":int,
-    "Diferencia Promedio importaciones 2018-2022 (miles USD)":int}
+    "Población 2023 (millones)":int,
+    "Promedio Desempleo (2019-2023)":float,
+    "Crecimiento PIB (2019-2023)":float,
+    "Diferencia Promedio exportaciones 2019-2023 (miles USD)":int,
+    "Diferencia Promedio importaciones 2019-2023 (miles USD)":int}
 
 base=base.astype(dtype)
 
@@ -72,12 +72,12 @@ base2=pd.read_csv("{}/files3/Base prod potenciales.zip".format(path),
 
 #Types
 dtype2={
-    "Exportaciones Colombianas en 2022 (miles USD)":int,
-    "Valor Importaciones 2022 (miles USD)":int,
-    "Exportaciones promedio 2018-2022 (miles USD)":int,
-    "Importaciones promedio 2018-2022 (miles USD)":int,
-    "Diferencia Promedio exportaciones 2018-2022 (miles USD)":int,
-    "Diferencia Promedio importaciones 2018-2022 (miles USD)":int}
+    "Exportaciones Colombianas en 2023 (miles USD)":int,
+    "Valor Importaciones 2023 (miles USD)":int,
+    "Exportaciones promedio 2019-2023 (miles USD)":int,
+    "Importaciones promedio 2019-2023 (miles USD)":int,
+    "Diferencia Promedio exportaciones 2019-2023 (miles USD)":int,
+    "Diferencia Promedio importaciones 2019-2023 (miles USD)":int}
 
 base2=base2.astype(dtype2)
 
@@ -362,21 +362,21 @@ dict_tlc={'ALIANZA DEL PACÍFICO': ['Chile', 'México', 'Perú'],
 
 #Diccionario de como agregar los datos 
 dict_agg={
-  "Exportaciones Colombianas en 2022 (miles USD)":"sum",
-  "Valor Importaciones 2022 (miles USD)":"sum",
-  "PIB USD 2022":"mean",
-  "Crecimiento PIB (2018-2022)":"mean",
-  "Promedio Desempleo (2018-2022)":"mean",
-  "Población 2022 (millones)":"mean",
+  "Exportaciones Colombianas en 2023 (miles USD)":"sum",
+  "Valor Importaciones 2023 (miles USD)":"sum",
+  "PIB USD 2023":"mean",
+  "Crecimiento PIB (2019-2023)":"mean",
+  "Promedio Desempleo (2019-2023)":"mean",
+  "Población 2023 (millones)":"mean",
   'Ranking LPI':"mean",
-  "Número de Empresas Exportadoras Colombianas 2022":"sum",
-  'Exportaciones promedio 2018-2022 (miles USD)':"sum",
-  "Importaciones promedio 2018-2022 (miles USD)":"sum",
-  "Diferencia Promedio exportaciones 2018-2022 (miles USD)":"sum",
-  "Diferencia Promedio importaciones 2018-2022 (miles USD)":"sum",
-  "Total Exportaciones 2018-2022 (miles USD)":"sum",
+  "Número de Empresas Exportadoras Colombianas 2023":"sum",
+  'Exportaciones promedio 2019-2023 (miles USD)':"sum",
+  "Importaciones promedio 2019-2023 (miles USD)":"sum",
+  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":"sum",
+  "Diferencia Promedio importaciones 2019-2023 (miles USD)":"sum",
+  "Total Exportaciones 2019-2023 (miles USD)":"sum",
   "Suma Exportaciones Total":"mean",
-  "Total Importaciones 2018-2022 (miles USD)":"sum",
+  "Total Importaciones 2019-2023 (miles USD)":"sum",
   "Suma Importaciones Total":"mean"
 }
 
@@ -402,21 +402,21 @@ dict_formatos={
   "Puntaje Demanda":["numeric",None],
   "Puntaje Final":["numeric",None],
   "Cuadrante de Potencialidad":["text",None],
-  "Balanza Comercial en 2022":["numeric",FormatTemplate.money(0)],
-  "PIB USD 2022":["numeric",FormatTemplate.money(0)],
-  "Exportaciones Colombianas en 2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Valor Importaciones 2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Crecimiento PIB (2018-2022)":["numeric",FormatTemplate.percentage(1)],
-  "Promedio Desempleo (2018-2022)":["numeric",FormatTemplate.percentage(1)],
-  "Población 2022 (millones)":["numeric",None],
+  "Balanza Comercial en 2023":["numeric",FormatTemplate.money(0)],
+  "PIB USD 2023":["numeric",FormatTemplate.money(0)],
+  "Exportaciones Colombianas en 2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Valor Importaciones 2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Crecimiento PIB (2019-2023)":["numeric",FormatTemplate.percentage(1)],
+  "Promedio Desempleo (2019-2023)":["numeric",FormatTemplate.percentage(1)],
+  "Población 2023 (millones)":["numeric",None],
   'Ranking LPI':["numeric",None],
-  "Número de Empresas Exportadoras Colombianas 2022":["numeric",None],
-  'Exportaciones promedio 2018-2022 (miles USD)':["numeric",FormatTemplate.money(0)],
-  "Importaciones promedio 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio exportaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio importaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Total Importaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Total Exportaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Número de Empresas Exportadoras Colombianas 2023":["numeric",None],
+  'Exportaciones promedio 2019-2023 (miles USD)':["numeric",FormatTemplate.money(0)],
+  "Importaciones promedio 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Total Importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Total Exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
   "Ventaja Comparativa Revelada":["numeric",None]
 }
 
@@ -425,29 +425,29 @@ dict_formatos2={
   "Puntaje Demanda":["numeric",None],
   "Puntaje Final":["numeric",None],
   "Cuadrante de Potencialidad":["text",None],
-  "Número de Empresas Exportadoras Colombianas 2022":["numeric",None],
-  "Crecimiento PIB (2018-2022)":["numeric",FormatTemplate.percentage(1)],
-  "Promedio Desempleo (2018-2022)":["numeric","None"],
+  "Número de Empresas Exportadoras Colombianas 2023":["numeric",None],
+  "Crecimiento PIB (2019-2023)":["numeric",FormatTemplate.percentage(1)],
+  "Promedio Desempleo (2019-2023)":["numeric","None"],
   "Ventaja Comparativa Revelada":["numeric",None],
-  'Exportaciones promedio 2018-2022 (miles USD)':["numeric",FormatTemplate.money(0)],
-  "Importaciones promedio 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "PIB USD 2022":["numeric",FormatTemplate.money(0)],
+  'Exportaciones promedio 2019-2023 (miles USD)':["numeric",FormatTemplate.money(0)],
+  "Importaciones promedio 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "PIB USD 2023":["numeric",FormatTemplate.money(0)],
   'Ranking LPI':["numeric",None],
-  "Población 2022 (millones)":["numeric",None],
-  "Diferencia Promedio exportaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio importaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Población 2023 (millones)":["numeric",None],
+  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
   "Ventaja Comparativa Revelada":["numeric",None]
 }
 
 #Agregacion productos potenciales
 dict_agg_2={
-  "Exportaciones Colombianas en 2022 (miles USD)":"sum",
-  "Valor Importaciones 2022 (miles USD)":"sum",
-  "Número de Empresas Exportadoras Colombianas 2022":"sum",
-  'Exportaciones promedio 2018-2022 (miles USD)':"sum",
-  "Importaciones promedio 2018-2022 (miles USD)":"sum",
-  "Diferencia Promedio exportaciones 2018-2022 (miles USD)":"sum",
-  "Diferencia Promedio importaciones 2018-2022 (miles USD)":"sum"
+  "Exportaciones Colombianas en 2023 (miles USD)":"sum",
+  "Valor Importaciones 2023 (miles USD)":"sum",
+  "Número de Empresas Exportadoras Colombianas 2023":"sum",
+  'Exportaciones promedio 2019-2023 (miles USD)':"sum",
+  "Importaciones promedio 2019-2023 (miles USD)":"sum",
+  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":"sum",
+  "Diferencia Promedio importaciones 2019-2023 (miles USD)":"sum"
 }
 
 #Diccionario de formatos para la tabla
@@ -462,15 +462,15 @@ dict_formatos_2={
   "Puntaje Demanda":["numeric",None],
   "Puntaje Final":["numeric",None],
   "Cuadrante de Potencialidad":["text",None],
-  "Exportaciones Colombianas en 2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Valor Importaciones 2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Número de Empresas Exportadoras Colombianas 2022":["numeric",None],
-  'Exportaciones promedio 2018-2022 (miles USD)':["numeric",FormatTemplate.money(0)],
-  "Importaciones promedio 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio exportaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio importaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Total Importaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Total Exportaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Exportaciones Colombianas en 2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Valor Importaciones 2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Número de Empresas Exportadoras Colombianas 2023":["numeric",None],
+  'Exportaciones promedio 2019-2023 (miles USD)':["numeric",FormatTemplate.money(0)],
+  "Importaciones promedio 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Total Importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Total Exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
   "Ventaja Comparativa Revelada":["numeric",None]
 }
 
@@ -479,11 +479,11 @@ dict_formatos2_2={
   "Puntaje Demanda":["numeric",None],
   "Puntaje Final":["numeric",None],
   "Cuadrante de Potencialidad":["text",None],
-  "Número de Empresas Exportadoras Colombianas 2022":["numeric",None],
-  'Exportaciones promedio 2018-2022 (miles USD)':["numeric",FormatTemplate.money(0)],
-  "Importaciones promedio 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio exportaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio importaciones 2018-2022 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Número de Empresas Exportadoras Colombianas 2023":["numeric",None],
+  'Exportaciones promedio 2019-2023 (miles USD)':["numeric",FormatTemplate.money(0)],
+  "Importaciones promedio 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
 }
 
 
@@ -566,9 +566,9 @@ dict_colors={
 #Diccionario variables mapa
 
 dict_map={
-    "Exportaciones promedio 2018-2022 (miles USD)":0,
-    "Importaciones promedio 2018-2022 (miles USD)":0,
-    "Número de Empresas Exportadoras Colombianas 2022":0
+    "Exportaciones promedio 2019-2023 (miles USD)":0,
+    "Importaciones promedio 2019-2023 (miles USD)":0,
+    "Número de Empresas Exportadoras Colombianas 2023":0
 
 }
 
@@ -667,9 +667,9 @@ children=[
                 ],
                 value=['Puntaje Final',
                     'Cuadrante de Potencialidad',
-                    'Exportaciones promedio 2018-2022 (miles USD)',
-                    'Importaciones promedio 2018-2022 (miles USD)',
-                    'Número de Empresas Exportadoras Colombianas 2022'],
+                    'Exportaciones promedio 2019-2023 (miles USD)',
+                    'Importaciones promedio 2019-2023 (miles USD)',
+                    'Número de Empresas Exportadoras Colombianas 2023'],
                 labelStyle={"display":"inline-block","margin-left": "auto",'padding':"5px",
                 'width':'33%','fontFamily':'Helvetica','fontSize':'14px',
                 'verticalAlign':'text-top','heigh':'auto'}
@@ -714,7 +714,7 @@ children=[
                 options=[{'label':k,'value':k} for k in list(dict_map.keys())],
                 multi=False,
                 placeholder='Selecciona una variable para mostrar en el mapa',
-                value="Importaciones promedio 2018-2022 (miles USD)",
+                value="Importaciones promedio 2019-2023 (miles USD)",
             )
         ],id='card-4'),
         dbc.CardBody([
@@ -850,8 +850,8 @@ children2=[
                 options=[
                     {'label': key, 'value': key} for key in list(dict_formatos2_2.keys())
                 ],
-                value=["Puntaje Final","Cuadrante de Potencialidad","Número de Empresas Exportadoras Colombianas 2022",
-                "Exportaciones promedio 2018-2022 (miles USD)","Importaciones promedio 2018-2022 (miles USD)"],
+                value=["Puntaje Final","Cuadrante de Potencialidad","Número de Empresas Exportadoras Colombianas 2023",
+                "Exportaciones promedio 2019-2023 (miles USD)","Importaciones promedio 2019-2023 (miles USD)"],
                 labelStyle={"display":"inline-block","margin-left": "auto",'padding':"5px",
                 'width':'33%','fontFamily':'Helvetica','fontSize':'14px','height':'auto','textAlign':'left',
                 'verticalAlign':'text-top'}
@@ -1058,8 +1058,8 @@ def update_table(tab, value, check):
 
     # Calcular VCR
     filt["Ventaja Comparativa Revelada"] = (
-        (filt["Total Exportaciones 2018-2022 (miles USD)"] / filt["Suma Exportaciones Total"]) /
-        (filt["Total Importaciones 2018-2022 (miles USD)"] / filt["Suma Importaciones Total"])
+        (filt["Total Exportaciones 2019-2023 (miles USD)"] / filt["Suma Exportaciones Total"]) /
+        (filt["Total Importaciones 2019-2023 (miles USD)"] / filt["Suma Importaciones Total"])
     ).fillna(0).round(2)
 
     filt = filt.reset_index()
@@ -1074,8 +1074,8 @@ def update_table(tab, value, check):
     mean = mean.merge(filt, on="Pais", how="left")
     mean = mean[v]
 
-    if "Promedio Desempleo (2018-2022)" in v:
-        mean["Promedio Desempleo (2018-2022)"] = mean["Promedio Desempleo (2018-2022)"].astype(str).str[:4]
+    if "Promedio Desempleo (2019-2023)" in v:
+        mean["Promedio Desempleo (2019-2023)"] = mean["Promedio Desempleo (2019-2023)"].astype(str).str[:4]
 
     return [{'name': c, 'id': c, 'type': dict_formatos[c][0], 'format': dict_formatos[c][1]} for c in mean.columns], mean.to_dict("records")
 
@@ -1359,8 +1359,8 @@ def calculo(paises,tab,radio,names,cadena):
         mean=mean[mean["Cuadrante de Potencialidad"]==dict_pot[radio]]
 
     # Se Filtran los paises e la base gigante en el groupby
-    cols=[dict_tt2[tab],"Exportaciones promedio 2018-2022 (miles USD)","Importaciones promedio 2018-2022 (miles USD)",
-    "Número de Empresas Exportadoras Colombianas 2022"]
+    cols=[dict_tt2[tab],"Exportaciones promedio 2019-2023 (miles USD)","Importaciones promedio 2019-2023 (miles USD)",
+    "Número de Empresas Exportadoras Colombianas 2023"]
     filt=base2[base2["Pais"].isin(paises)].groupby(dict_tt2[tab]).agg(dict_agg_2).reset_index()[cols]
     mean=mean.merge(filt,on=dict_tt2[tab])
 
