@@ -47,3 +47,4 @@ virtualenv-clone==0.5.7
 Werkzeug==2.1.0
 whitenoise==6.0.0
 zipp==3.7.0
+flask-login
