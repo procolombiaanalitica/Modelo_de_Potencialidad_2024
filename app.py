@@ -443,7 +443,7 @@ dict_formatos2={
 dict_agg_2={
   "Exportaciones Colombianas en 2023 (miles USD)":"sum",
   "Valor Importaciones 2023 (miles USD)":"sum",
-  "Número de Empresas Exportadoras Colombianas 2023":"sum",
+  "Número de Empresas Exportadoras Colombianas 2023":"mean",
   'Exportaciones promedio 2019-2023 (miles USD)':"sum",
   "Importaciones promedio 2019-2023 (miles USD)":"sum",
   "Diferencia Promedio exportaciones 2019-2023 (miles USD)":"sum",
