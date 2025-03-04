@@ -83,17 +83,6 @@ base2=base2.astype(dtype2)
 
 del dtype,dtype2
 
-#BASE CONTEO DE EMPRESAS
-
-base_conteo=pd.read_csv("{}/conteo/Base Conteo.txt".format(path),
-    sep="|",encoding="utf-8",dtype={"Pais":str,"Sector":str,"Subsector":str,"Posición":str,'NIT':str})
-
-#Types
-dtype3={
-    "Empresa exporto"}
-        
-#Diccionario de productos,sectores y susbectores x cadena
-
 #Puntajes y VCR paises potenciales
 prod_pc=pd.read_csv("{}/files4/P-PC.txt".format(path),sep="|",encoding="utf-8").set_index("Pais")
 prod_pm=pd.read_csv("{}/files4/P-PM.txt".format(path),sep="|",encoding="utf-8").set_index("Pais")
@@ -106,10 +95,10 @@ sub_pm=pd.read_csv("{}/files4/Sub-PM.txt".format(path),sep="|",encoding="utf-8")
 
 #Correlativa para el mapbox
 corr=pd.read_csv("{}/files4/corr_latitud.txt".format(path),sep="|",encoding="utf-8")
+
 #Correlativa descripcion paises potenciales
 desc=pd.read_csv("{}/files4/descripcion.txt".format(path),
     sep="|",encoding="utf-8")
-
 
 #Puntajes productos potenciales
 
