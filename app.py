@@ -44,6 +44,8 @@ encoded_image2 = base64.b64encode(open(image_filename2, 'rb').read())
 
 
 #Cargar Bases que se necesitan
+emp = pd.read_csv("{}/files3/Base_empresas.txt".format(path),
+                          sep='|', encoding ='utf-8' )
 
 #BASE PAISES POTENCIALES
 base=pd.read_csv("{}/files4/Base paises potenciales.zip".format(path),
@@ -51,19 +53,20 @@ base=pd.read_csv("{}/files4/Base paises potenciales.zip".format(path),
 
 #Types
 dtype={
-    "Exportaciones Colombianas en 2023 (miles USD)":int,
-    "Valor Importaciones 2023 (miles USD)":int,
-    "PIB USD 2023":int,
-    "Exportaciones promedio 2019-2023 (miles USD)":int,
-    "Importaciones promedio 2019-2023 (miles USD)":int,
+    "Exportaciones Colombianas en 2024 (miles USD)":int,
+    "Valor Importaciones 2024 (miles USD)":int,
+    "PIB USD 2024":int,
+    "Exportaciones promedio 2020-2024 (miles USD)":int,
+    "Importaciones promedio 2020-2024 (miles USD)":int,
     "Ranking LPI":int,
-    "Población 2023 (millones)":int,
-    "Promedio Desempleo (2019-2023)":float,
-    "Crecimiento PIB (2019-2023)":float,
-    "Diferencia Promedio exportaciones 2019-2023 (miles USD)":int,
-    "Diferencia Promedio importaciones 2019-2023 (miles USD)":int}
+    "Población 2024 (millones)":int,
+    "Promedio Desempleo (2020-2024)":float,
+    "Crecimiento PIB (2020-2024)":float,
+    "Diferencia Promedio exportaciones 2020-2024 (miles USD)":int,
+    "Diferencia Promedio importaciones 2020-2024 (miles USD)":int}
 
 base=base.astype(dtype)
+
 
 
 #BASE PRODUCTOS POTENCIALES
@@ -72,12 +75,12 @@ base2=pd.read_csv("{}/files3/Base prod potenciales.zip".format(path),
 
 #Types
 dtype2={
-    "Exportaciones Colombianas en 2023 (miles USD)":int,
-    "Valor Importaciones 2023 (miles USD)":int,
-    "Exportaciones promedio 2019-2023 (miles USD)":int,
-    "Importaciones promedio 2019-2023 (miles USD)":int,
-    "Diferencia Promedio exportaciones 2019-2023 (miles USD)":int,
-    "Diferencia Promedio importaciones 2019-2023 (miles USD)":int}
+    "Exportaciones Colombianas en 2024 (miles USD)":int,
+    "Valor Importaciones 2024 (miles USD)":int,
+    "Exportaciones promedio 2020-2024 (miles USD)":int,
+    "Importaciones promedio 2020-2024 (miles USD)":int,
+    "Diferencia Promedio exportaciones 2020-2024 (miles USD)":int,
+    "Diferencia Promedio importaciones 2020-2024 (miles USD)":int}
 
 base2=base2.astype(dtype2)
 
@@ -128,6 +131,15 @@ desc2=pd.read_csv("{}/files3/descripcion.txt".format(path),sep="|",encoding="utf
 pos=base["Posición"].unique()
 sec=base["Sector"].unique()
 sub=base["Subsector"].unique()
+
+
+# diccionario para el conteo de empresas:
+map_nivel_emp = {
+    "Posición": "HS6",       # en emp
+    "Sector": "Sector",      # igual
+    "Subsector": "Subsector" # igual
+}
+
 
 
 #Funciones Necesarias
@@ -248,10 +260,60 @@ def make_puntajes(tab, value):
     return mean
 
 
+#Calculo empresas
+def actualizar_empresas(df_empresas, df_base, nivel, umbral=1000):
+    """
+    Reemplaza la columna 'Número de Empresas Exportadoras Colombianas 2024'
+    en una base de productos o países potenciales con nuevos cálculos.
 
+    Parámetros
+    ----------
+    df_empresas : pd.DataFrame
+        DataFrame con columnas ['Pais', 'NIT', 'USD FOB 2024', nivel].
+    df_base : pd.DataFrame
+        Base potencial (productos o países) donde se reemplaza la columna.
+    nivel : str
+        Columna de agrupación: 'Sector', 'Subsector' o 'Posición' (HS6).
+    umbral : int, opcional
+        Valor mínimo de USD FOB 2024 para contar una empresa (default=1000).
 
+    Retorna
+    -------
+    pd.DataFrame
+        Base con la columna actualizada.
+    """
 
+    # Calcular empresas por país y nivel
+    empresas_calculadas = (
+        df_empresas.groupby(["Pais", nivel])
+        .agg({"USD FOB 2024": "sum", "NIT": "nunique"})
+        .reset_index()
+    )
 
+    # Filtrar solo empresas con FOB >= umbral
+    empresas_calculadas = empresas_calculadas[empresas_calculadas["USD FOB 2024"] >= umbral]
+
+    # Renombrar NIT como número de empresas
+    empresas_calculadas.rename(
+        columns={"NIT": "Número de Empresas Exportadoras Colombianas 2024"},
+        inplace=True
+    )
+
+    # Eliminar columna antigua en base potencial
+    if "Número de Empresas Exportadoras Colombianas 2024" in df_base.columns:
+        df_base = df_base.drop(columns=["Número de Empresas Exportadoras Colombianas 2024"])
+
+    # Hacer el merge
+    df_base = df_base.merge(empresas_calculadas[["Pais", nivel, "Número de Empresas Exportadoras Colombianas 2024"]],
+                            on=["Pais", nivel],
+                            how="left")
+
+    # Rellenar nulos con 0
+    df_base["Número de Empresas Exportadoras Colombianas 2024"] = (
+        df_base["Número de Empresas Exportadoras Colombianas 2024"].fillna(0).astype(int)
+    )
+
+    return df_base
 
 
 
@@ -356,21 +418,21 @@ dict_tlc={'ALIANZA DEL PACÍFICO': ['Chile', 'México', 'Perú'],
 
 #Diccionario de como agregar los datos 
 dict_agg={
-  "Exportaciones Colombianas en 2023 (miles USD)":"sum",
-  "Valor Importaciones 2023 (miles USD)":"sum",
-  "PIB USD 2023":"mean",
-  "Crecimiento PIB (2019-2023)":"mean",
-  "Promedio Desempleo (2019-2023)":"mean",
-  "Población 2023 (millones)":"mean",
+  "Exportaciones Colombianas en 2024 (miles USD)":"sum",
+  "Valor Importaciones 2024 (miles USD)":"sum",
+  "PIB USD 2024":"mean",
+  "Crecimiento PIB (2020-2024)":"mean",
+  "Promedio Desempleo (2020-2024)":"mean",
+  "Población 2024 (millones)":"mean",
   'Ranking LPI':"mean",
-  "Número de Empresas Exportadoras Colombianas 2023":"sum",
-  'Exportaciones promedio 2019-2023 (miles USD)':"sum",
-  "Importaciones promedio 2019-2023 (miles USD)":"sum",
-  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":"sum",
-  "Diferencia Promedio importaciones 2019-2023 (miles USD)":"sum",
-  "Total Exportaciones 2019-2023 (miles USD)":"sum",
+  "Número de Empresas Exportadoras Colombianas 2024":"sum",
+  'Exportaciones promedio 2020-2024 (miles USD)':"sum",
+  "Importaciones promedio 2020-2024 (miles USD)":"sum",
+  "Diferencia Promedio exportaciones 2020-2024 (miles USD)":"sum",
+  "Diferencia Promedio importaciones 2020-2024 (miles USD)":"sum",
+  "Total Exportaciones 2020-2024 (miles USD)":"sum",
   "Suma Exportaciones Total":"mean",
-  "Total Importaciones 2019-2023 (miles USD)":"sum",
+  "Total Importaciones 2020-2024 (miles USD)":"sum",
   "Suma Importaciones Total":"mean"
 }
 
@@ -396,21 +458,21 @@ dict_formatos={
   "Puntaje Demanda":["numeric",None],
   "Puntaje Final":["numeric",None],
   "Cuadrante de Potencialidad":["text",None],
-  "Balanza Comercial en 2023":["numeric",FormatTemplate.money(0)],
-  "PIB USD 2023":["numeric",FormatTemplate.money(0)],
-  "Exportaciones Colombianas en 2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Valor Importaciones 2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Crecimiento PIB (2019-2023)":["numeric",FormatTemplate.percentage(1)],
-  "Promedio Desempleo (2019-2023)":["numeric",FormatTemplate.percentage(1)],
-  "Población 2023 (millones)":["numeric",None],
+  "Balanza Comercial en 2024":["numeric",FormatTemplate.money(0)],
+  "PIB USD 2024":["numeric",FormatTemplate.money(0)],
+  "Exportaciones Colombianas en 2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Valor Importaciones 2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Crecimiento PIB (2020-2024)":["numeric",FormatTemplate.percentage(1)],
+  "Promedio Desempleo (2020-2024)":["numeric",FormatTemplate.percentage(1)],
+  "Población 2024 (millones)":["numeric",None],
   'Ranking LPI':["numeric",None],
-  "Número de Empresas Exportadoras Colombianas 2023":["numeric",None],
-  'Exportaciones promedio 2019-2023 (miles USD)':["numeric",FormatTemplate.money(0)],
-  "Importaciones promedio 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Total Importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Total Exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Número de Empresas Exportadoras Colombianas 2024":["numeric",None],
+  'Exportaciones promedio 2020-2024 (miles USD)':["numeric",FormatTemplate.money(0)],
+  "Importaciones promedio 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio exportaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio importaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Total Importaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Total Exportaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
   "Ventaja Comparativa Revelada":["numeric",None]
 }
 
@@ -419,29 +481,29 @@ dict_formatos2={
   "Puntaje Demanda":["numeric",None],
   "Puntaje Final":["numeric",None],
   "Cuadrante de Potencialidad":["text",None],
-  "Número de Empresas Exportadoras Colombianas 2023":["numeric",None],
-  "Crecimiento PIB (2019-2023)":["numeric",FormatTemplate.percentage(1)],
-  "Promedio Desempleo (2019-2023)":["numeric","None"],
+  "Número de Empresas Exportadoras Colombianas 2024":["numeric",None],
+  "Crecimiento PIB (2020-2024)":["numeric",FormatTemplate.percentage(1)],
+  "Promedio Desempleo (2020-2024)":["numeric",None],
   "Ventaja Comparativa Revelada":["numeric",None],
-  'Exportaciones promedio 2019-2023 (miles USD)':["numeric",FormatTemplate.money(0)],
-  "Importaciones promedio 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "PIB USD 2023":["numeric",FormatTemplate.money(0)],
+  'Exportaciones promedio 2020-2024 (miles USD)':["numeric",FormatTemplate.money(0)],
+  "Importaciones promedio 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "PIB USD 2024":["numeric",FormatTemplate.money(0)],
   'Ranking LPI':["numeric",None],
-  "Población 2023 (millones)":["numeric",None],
-  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Población 2024 (millones)":["numeric",None],
+  "Diferencia Promedio exportaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio importaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
   "Ventaja Comparativa Revelada":["numeric",None]
 }
 
 #Agregacion productos potenciales
 dict_agg_2={
-  "Exportaciones Colombianas en 2023 (miles USD)":"sum",
-  "Valor Importaciones 2023 (miles USD)":"sum",
-  "Número de Empresas Exportadoras Colombianas 2023":"mean",
-  'Exportaciones promedio 2019-2023 (miles USD)':"sum",
-  "Importaciones promedio 2019-2023 (miles USD)":"sum",
-  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":"sum",
-  "Diferencia Promedio importaciones 2019-2023 (miles USD)":"sum"
+  "Exportaciones Colombianas en 2024 (miles USD)":"sum",
+  "Valor Importaciones 2024 (miles USD)":"sum",
+  "Número de Empresas Exportadoras Colombianas 2024":"mean",
+  'Exportaciones promedio 2020-2024 (miles USD)':"sum",
+  "Importaciones promedio 2020-2024 (miles USD)":"sum",
+  "Diferencia Promedio exportaciones 2020-2024 (miles USD)":"sum",
+  "Diferencia Promedio importaciones 2020-2024 (miles USD)":"sum"
 }
 
 #Diccionario de formatos para la tabla
@@ -456,15 +518,15 @@ dict_formatos_2={
   "Puntaje Demanda":["numeric",None],
   "Puntaje Final":["numeric",None],
   "Cuadrante de Potencialidad":["text",None],
-  "Exportaciones Colombianas en 2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Valor Importaciones 2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Número de Empresas Exportadoras Colombianas 2023":["numeric",None],
-  'Exportaciones promedio 2019-2023 (miles USD)':["numeric",FormatTemplate.money(0)],
-  "Importaciones promedio 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Total Importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Total Exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Exportaciones Colombianas en 2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Valor Importaciones 2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Número de Empresas Exportadoras Colombianas 2024":["numeric",None],
+  'Exportaciones promedio 2020-2024 (miles USD)':["numeric",FormatTemplate.money(0)],
+  "Importaciones promedio 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio exportaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio importaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Total Importaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Total Exportaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
   "Ventaja Comparativa Revelada":["numeric",None]
 }
 
@@ -473,11 +535,11 @@ dict_formatos2_2={
   "Puntaje Demanda":["numeric",None],
   "Puntaje Final":["numeric",None],
   "Cuadrante de Potencialidad":["text",None],
-  "Número de Empresas Exportadoras Colombianas 2023":["numeric",None],
-  'Exportaciones promedio 2019-2023 (miles USD)':["numeric",FormatTemplate.money(0)],
-  "Importaciones promedio 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio exportaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
-  "Diferencia Promedio importaciones 2019-2023 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Número de Empresas Exportadoras Colombianas 2024":["numeric",None],
+  'Exportaciones promedio 2020-2024 (miles USD)':["numeric",FormatTemplate.money(0)],
+  "Importaciones promedio 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio exportaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
+  "Diferencia Promedio importaciones 2020-2024 (miles USD)":["numeric",FormatTemplate.money(0)],
 }
 
 
@@ -560,9 +622,9 @@ dict_colors={
 #Diccionario variables mapa
 
 dict_map={
-    "Exportaciones promedio 2019-2023 (miles USD)":0,
-    "Importaciones promedio 2019-2023 (miles USD)":0,
-    "Número de Empresas Exportadoras Colombianas 2023":0
+    "Exportaciones promedio 2020-2024 (miles USD)":0,
+    "Importaciones promedio 2020-2024 (miles USD)":0,
+    "Número de Empresas Exportadoras Colombianas 2024":0
 
 }
 
@@ -661,9 +723,9 @@ children=[
                 ],
                 value=['Puntaje Final',
                     'Cuadrante de Potencialidad',
-                    'Exportaciones promedio 2019-2023 (miles USD)',
-                    'Importaciones promedio 2019-2023 (miles USD)',
-                    'Número de Empresas Exportadoras Colombianas 2023'],
+                    'Exportaciones promedio 2020-2024 (miles USD)',
+                    'Importaciones promedio 2020-2024 (miles USD)',
+                    'Número de Empresas Exportadoras Colombianas 2024'],
                 labelStyle={"display":"inline-block","margin-left": "auto",'padding':"5px",
                 'width':'33%','fontFamily':'Helvetica','fontSize':'14px',
                 'verticalAlign':'text-top','heigh':'auto'}
@@ -708,7 +770,7 @@ children=[
                 options=[{'label':k,'value':k} for k in list(dict_map.keys())],
                 multi=False,
                 placeholder='Selecciona una variable para mostrar en el mapa',
-                value="Importaciones promedio 2019-2023 (miles USD)",
+                value="Importaciones promedio 2020-2024 (miles USD)",
             )
         ],id='card-4'),
         dbc.CardBody([
@@ -844,8 +906,8 @@ children2=[
                 options=[
                     {'label': key, 'value': key} for key in list(dict_formatos2_2.keys())
                 ],
-                value=["Puntaje Final","Cuadrante de Potencialidad","Número de Empresas Exportadoras Colombianas 2023",
-                "Exportaciones promedio 2019-2023 (miles USD)","Importaciones promedio 2019-2023 (miles USD)"],
+                value=["Puntaje Final","Cuadrante de Potencialidad","Número de Empresas Exportadoras Colombianas 2024",
+                "Exportaciones promedio 2020-2024 (miles USD)","Importaciones promedio 2020-2024 (miles USD)"],
                 labelStyle={"display":"inline-block","margin-left": "auto",'padding':"5px",
                 'width':'33%','fontFamily':'Helvetica','fontSize':'14px','height':'auto','textAlign':'left',
                 'verticalAlign':'text-top'}
@@ -1030,49 +1092,55 @@ def update(tab, cadena):
      Input("check", "value")]
 )
 def update_table(tab, value, check):
-    v = ["Pais"]  # Columnas mínimas a mostrar
+    v = ["Pais"]
     v.extend(check)
 
-    # Filtrar datos según el nivel seleccionado
-    if tab == "t1":  # Sector
-        if value:  # Manejar selección múltiple
-            filt = base[base["Sector"].isin(value)].groupby("Pais").agg(dict_agg)
-        else:
-            filt = base.groupby("Pais").agg(dict_agg)
-    elif tab == "t2":  # Subsector
-        if value:
-            filt = base[base["Subsector"].isin(value)].groupby("Pais").agg(dict_agg)
-        else:
-            filt = base.groupby("Pais").agg(dict_agg)
-    else:  # Producto
-        if value:
-            filt = base[base["Posición"].isin(value)].groupby("Pais").agg(dict_agg)
-        else:
-            filt = base.groupby("Pais").agg(dict_agg)
+    # Determinar nivel de base según la pestaña
+    if tab == "t1":
+        nivel = "Sector"
+    elif tab == "t2":
+        nivel = "Subsector"
+    else:
+        nivel = "Posición"
 
-    # Calcular VCR
-    filt["Ventaja Comparativa Revelada"] = (
-        (filt["Total Exportaciones 2019-2023 (miles USD)"] / filt["Suma Exportaciones Total"]) /
-        (filt["Total Importaciones 2019-2023 (miles USD)"] / filt["Suma Importaciones Total"])
-    ).fillna(0).round(2)
+    # Traducir nivel al nombre correcto en emp
+    nivel_emp = map_nivel_emp[nivel]
 
-    filt = filt.reset_index()
+    # Filtrar empresas según selección y recalcular
+    if value:
+        emp_filtrado = emp[emp[nivel_emp].isin(value)]
+    else:
+        emp_filtrado = emp
 
-    # Validar que `value` sea compatible con `make_puntajes`
+    base_actualizada = actualizar_empresas(emp_filtrado, base, nivel=nivel_emp)
+
+    # Agrupación según selección de valores
+    if value:
+        filt = base_actualizada[base_actualizada[nivel].isin(value)].groupby("Pais").agg(dict_agg)
+    else:
+        filt = base_actualizada.groupby("Pais").agg(dict_agg)
+
+    # Calcular puntajes
     if value:
         mean = make_puntajes(tab, value)
     else:
-        mean = make_puntajes(tab, filt["Pais"].tolist())
+        mean = make_puntajes(tab, filt.index.tolist())
 
-    # Combinar datos para la tabla
-    mean = mean.merge(filt, on="Pais", how="left")
+    # Combinar resultados
+    mean = mean.merge(filt.reset_index(), on="Pais", how="left")
     mean = mean[v]
 
-    if "Promedio Desempleo (2019-2023)" in v:
-        mean["Promedio Desempleo (2019-2023)"] = mean["Promedio Desempleo (2019-2023)"].astype(str).str[:4]
+    # Formato especial para desempleo
+    if "Promedio Desempleo (2020-2024)" in v:
+        mean["Promedio Desempleo (2020-2024)"] = (
+            mean["Promedio Desempleo (2020-2024)"].astype(str).str[:4]
+        )
 
-    return [{'name': c, 'id': c, 'type': dict_formatos[c][0], 'format': dict_formatos[c][1]} for c in mean.columns], mean.to_dict("records")
-
+    return [
+        {"name": c, "id": c,
+         "type": dict_formatos[c][0],
+         "format": dict_formatos[c][1]} for c in mean.columns
+    ], mean.to_dict("records")
 
 #Callback to fix mapbox_bug
 
@@ -1353,8 +1421,8 @@ def calculo(paises,tab,radio,names,cadena):
         mean=mean[mean["Cuadrante de Potencialidad"]==dict_pot[radio]]
 
     # Se Filtran los paises e la base gigante en el groupby
-    cols=[dict_tt2[tab],"Exportaciones promedio 2019-2023 (miles USD)","Importaciones promedio 2019-2023 (miles USD)",
-    "Número de Empresas Exportadoras Colombianas 2023"]
+    cols=[dict_tt2[tab],"Exportaciones promedio 2020-2024 (miles USD)","Importaciones promedio 2020-2024 (miles USD)",
+    "Número de Empresas Exportadoras Colombianas 2024"]
     filt=base2[base2["Pais"].isin(paises)].groupby(dict_tt2[tab]).agg(dict_agg_2).reset_index()[cols]
     mean=mean.merge(filt,on=dict_tt2[tab])
 
@@ -1488,45 +1556,58 @@ def calculo(paises,tab,radio,names,cadena):
 
 @app2.callback(
   [Output("table","columns"),
-  Output("table","data"),
-  ],
+  Output("table","data")],
   [Input("grp","value"),
   Input("tabs","active_tab"),
   Input("my_check","value")]
 )
 
-def update_table(paises,tab,check):
-  mean=make_table(paises,
-  dict_tabs2[tab][0],dict_tabs2[tab][1])
-  mean["Cuadrante de Potencialidad"]=cuadrantes(mean,dict_pot)
-  if dict_tabs2[tab][2]=="Posición":
-    mean=mean.merge(base2[base2["Pais"].isin(paises)].groupby(["Posición"]).agg(dict_agg_2).reset_index(),on=dict_tabs2[tab][2])
-    mean=mean.merge(desc2,on="Posición")
-    cols=check
-    cols.insert(0,dict_tabs2[tab][2]) 
-    cols.insert(1,"Descripcion") 
-    #cols.insert(0,"Cadena")
-  else:
-    mean=mean.merge(base2[base2["Pais"].isin(paises)].groupby([dict_tabs2[tab][2]]).agg(dict_agg_2).reset_index(),on=dict_tabs2[tab][2])
-    cols=check
-    cols.insert(0,dict_tabs2[tab][2]) 
-    #cols.insert(1,"Cadena") 
-  
-  mean=mean[cols]
-  
-  #Add cadena
-  cadenas=base2[[dict_tabs2[tab][2],"Cadena"]].drop_duplicates()
-  mean=mean.merge(cadenas,on=dict_tabs2[tab][2])
+def update_table(paises, tab, check):
+    # Cálculo de puntajes
+    mean = make_table(paises, dict_tabs2[tab][0], dict_tabs2[tab][1])
+    mean["Cuadrante de Potencialidad"] = cuadrantes(mean, dict_pot)
 
-  cols.insert(1,"Cadena")
+    # Determinar nivel en base2 (Sector/Subsector/Posición)
+    nivel = dict_tabs2[tab][2]
+    # Traducir al nombre correcto en emp
+    nivel_emp = map_nivel_emp[nivel]
 
-  mean=mean[cols]
+    # Recalcular empresas con el nivel correcto
+    base2_actualizada = actualizar_empresas(
+        emp[emp["Pais"].isin(paises)],
+        base2,
+        nivel=nivel_emp
+    )
 
+    if nivel == "Posición":
+        mean = mean.merge(
+            base2_actualizada.groupby([nivel_emp]).agg(dict_agg_2).reset_index(),
+            left_on=nivel, right_on=nivel_emp
+        )
+        mean = mean.merge(desc2, on="Posición")
+        cols = [nivel] + check.copy()
+        cols.insert(1, "Descripcion")
+    else:
+        mean = mean.merge(
+            base2_actualizada.groupby([nivel_emp]).agg(dict_agg_2).reset_index(),
+            left_on=nivel, right_on=nivel_emp
+        )
+        cols = [nivel] + check.copy()
 
-  return [{"name": i, "id": i,
-        'deletable': False,
-        'type':dict_formatos_2[i][0],
-        'format':dict_formatos_2[i][1]} for i in mean.columns],mean.to_dict("records")
+    # Agregar columna Cadena (usa nivel de base2, no el de emp)
+    cadenas = base2[[nivel, "Cadena"]].drop_duplicates()
+    mean = mean.merge(cadenas, on=nivel)
+    cols.insert(1, "Cadena")
+
+    mean = mean[cols]
+
+    return [
+        {"name": i, "id": i,
+         "deletable": False,
+         "type": dict_formatos_2[i][0],
+         "format": dict_formatos_2[i][1]} for i in mean.columns
+    ], mean.to_dict("records")
+
 
 
 #Callback titulo
